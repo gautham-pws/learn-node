@@ -1,5 +1,0 @@
-const {obj, func} = require('./utils')
-console.log(obj)
-console.log(func(1, 2))
-console.log(__filename)
-//console.log(__dirname)
