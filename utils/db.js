@@ -39,8 +39,10 @@ const userSchema = new Schema({
 
 const User = mongoose.model('User', userSchema)
 
-const user1 = new User({
-	name: "gpg", age: 233, email: "gautham@gmail.com", password: "123"
-})
+//const user1 = new User({
+//	name: "gpg", age: 233, email: "gautham@gmail.com", password: "123"
+//})
 
-user1.save().then((a) => console.log(a)).then((e) => console.log(e))
+//user1.save().then((a) => console.log(a)).then((e) => console.log(e))
+
+module.exports = User
