@@ -18,21 +18,21 @@ const userSchema = new Schema({
   age: {
     type: Number,
     required: true,
-    // validate(value) {
-    //   if (value < 1) {
-    //     throw new Error("Sorry, you're too young!");
-    //   }
-    // },
+    validate(value) {
+      if (value < 14) {
+        throw new Error("You must be at least 14 years old to continue");
+      }
+    },
   },
   email: {
     type: String,
     required: true,
     unique: true,
-    // validate(value) {
-    //   if (!validator.isEmail(value)) {
-    //     throw new Error("Invalid email!");
-    //   }
-    // },
+    validate(value) {
+      if (!validator.isEmail(value)) {
+        throw new Error("Invalid email!");
+      }
+    },
   },
   password: {
     type: String,
