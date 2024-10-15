@@ -2,19 +2,15 @@ const express = require("express");
 require("./db/connection");
 
 const userRouter = require("./routers/user.routers");
+const requestId = require("./middleware/requestId");
 
 const app = express();
-app.use(userRouter);
-
-app.use(express.urlencoded({extended: true}));
 
 app.use(express.json());
-app.listen("3000");
 
-// app.get("/", async (req, res) => {
-//   try {
-//     res.status(200).send();
-//   } catch (e) {
-//     res.status(400).send(e.message);
-//   }
-// });
+app.use(requestId);
+app.use(userRouter);
+
+app.listen(3000, () => {
+  console.log("Server is running on port 3000");
+});

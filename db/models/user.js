@@ -9,7 +9,7 @@ const jwt = require("jsonwebtoken");
 
 const Schema = mongoose.Schema;
 
-const usersSchema = new Schema({
+const userSchema = new Schema({
   name: {
     type: String,
     required: true,
@@ -90,6 +90,6 @@ const usersSchema = new Schema({
 //   next();
 // });
 
-const Users = mongoose.model("Users", usersSchema);
+const User = mongoose.model("User", userSchema);
 
-module.exports = Users;
+module.exports = User;
