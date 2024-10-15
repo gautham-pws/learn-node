@@ -3,10 +3,6 @@ const validator = require("validator");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
-// const uri =
-//   "mongodb+srv://gauthamp:Er4Dz26iRlHxI11c@cluster0.gjgpd.mongodb.net/project0?retryWrites=true&w=majority&appName=Cluster0";
-// mongoose.connect(uri);
-
 const Schema = mongoose.Schema;
 
 const userSchema = new Schema({
@@ -48,6 +44,11 @@ const userSchema = new Schema({
       },
     },
   ],
+  role: {
+    type: String,
+    enum: ["user", "admin"],
+    default: "user",
+  },
 });
 
 userSchema.methods.toJSON = function () {
