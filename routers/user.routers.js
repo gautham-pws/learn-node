@@ -1,6 +1,6 @@
 const express = require("express");
 const User = require("../db/models/user");
-// const auth = require("./middleware/auth");
+const auth = require("../middleware/auth");
 const router = new express.Router();
 
 // POST api/users add new users
@@ -182,3 +182,31 @@ router.delete("/api/users/:id", async (req, res) => {
 });
 
 module.exports = router;
+
+// POST api/login  -> generate jwt
+
+router.post("/api/login", async (req, res) => {
+  try {
+    const user = await User.findByCredentials(
+      req.body.email,
+      req.body.password
+    );
+    const token = await user.generateAuthToken();
+    res.status(200).send({user, token});
+  } catch (e) {
+    res.status(400).send(e.message);
+  }
+});
+
+// POST api/logout -> remove jwt
+router.post("/api/logout", auth, async (req, res) => {
+  try {
+    req.user.tokens = req.user.tokens.filter(
+      (token) => token.token !== req.token
+    );
+    await req.user.save();
+    res.status(200).send(req.user);
+  } catch (e) {
+    res.status(400).send(e.message);
+  }
+});

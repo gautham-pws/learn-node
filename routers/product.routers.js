@@ -1,3 +1,8 @@
+const express = require("express");
+const Product = require("../db/models/product");
+const router = new express.Router();
+// const auth = require("./middleware/auth");
+
 // GET api/products get all products
 
 // GET api/products/:id get products by id
@@ -21,3 +26,5 @@
 // POST api/products/:userid add new products by userid
 
 // PUT api/products/:userid and product id update products by userid
+
+module.exports = router;
