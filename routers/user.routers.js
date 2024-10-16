@@ -9,16 +9,6 @@ router.post("/api/users", auth, async (req, res) => {
 
   try {
     if (req.user.role !== "admin") {
-      // const error = {
-      //   status: "error",
-      //   status_code: 400,
-      //   timestamp: new Date(),
-      //   path: "/api/users",
-      //   request_id: req.requestId,
-      //   error: {
-      //     message: "Access denied. You don't have permission to create user",
-      //   },
-      // };
       throw new Error(
         "Access denied. You don't have permission to create user"
       );
@@ -199,8 +189,6 @@ router.delete("/api/users/:id", async (req, res) => {
   }
 });
 
-module.exports = router;
-
 // POST api/login  -> generate jwt
 
 router.post("/api/login", async (req, res) => {
@@ -229,3 +217,5 @@ router.post("/api/logout", auth, async (req, res) => {
     res.status(400).send(e.message);
   }
 });
+
+module.exports = router;
