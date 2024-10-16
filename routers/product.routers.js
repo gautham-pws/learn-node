@@ -11,16 +11,24 @@ router.get("/api/products", async (req, res) => {
     //     "Access denied. You don't have permission to view products"
     //   );
     // }
-
     const product = await Product.find();
 
-    res.status(200).send(product);
+    const success = {
+      status: "success",
+      status_code: 200,
+      timestamp: new Date(),
+      path: req.originalUrl,
+      request_id: req.requestId,
+      data: product,
+    };
+
+    res.status(200).send(success);
   } catch (e) {
     const error = {
       status: "error",
       status_code: 400,
       timestamp: new Date(),
-      path: "/api/products",
+      path: req.originalUrl,
       request_id: req.requestId,
       error: {
         message: e.message,
@@ -31,7 +39,7 @@ router.get("/api/products", async (req, res) => {
 });
 
 // GET api/products/:id get products by id
-router.get("/api/products/:id", async (req, res) => {
+router.get("/api/products/id/:id", async (req, res) => {
   try {
     // if (req.user.role !== "admin") {
     //   throw new Error(
@@ -47,7 +55,7 @@ router.get("/api/products/:id", async (req, res) => {
       status: "error",
       status_code: 400,
       timestamp: new Date(),
-      path: "/api/products",
+      path: req.originalUrl,
       request_id: req.requestId,
       error: {
         message: e.message,
@@ -153,7 +161,7 @@ router.delete("/api/products", auth, async (req, res) => {
       status: "success",
       status_code: 200,
       timestamp: new Date(),
-      path: "/api/products",
+      path: req.originalUrl,
       request_id: req.requestId,
       message: `${result.deletedCount} products have been successfully deleted.`,
     });
@@ -172,11 +180,68 @@ router.delete("/api/products", auth, async (req, res) => {
   }
 });
 
-// GET api/products/published find all published products
+// GET api/products/published - Get products based on published status
+router.get("/api/products/published", async (req, res) => {
+  const isPublished = req.query.published === "false" ? false : true;
+
+  try {
+    const products = await Product.find({published: isPublished});
+    res.status(200).send(products);
+  } catch (e) {
+    const error = {
+      status: "error",
+      status_code: 400,
+      timestamp: new Date(),
+      path: req.originalUrl,
+      request_id: req.requestId,
+      error: {
+        message: e.message,
+      },
+    };
+    res.status(400).send(error);
+  }
+});
 
 // GET api/products?name= find all products by name
+router.get("/api/products/name", async (req, res) => {
+  try {
+    const products = await Product.find({name: req.query.name});
+    console.log("🚀 ~ router.get ~ req.query:", req.query);
+    res.status(200).send(products);
+  } catch (e) {
+    const error = {
+      status: "error",
+      status_code: 400,
+      timestamp: new Date(),
+      path: req.originalUrl,
+      request_id: req.requestId,
+      error: {
+        message: e.message,
+      },
+    };
+    res.status(400).send(error);
+  }
+});
 
 // GET api/products/:userId get all products by user id
+router.get("/api/products/userId/:userId", async (req, res) => {
+  try {
+    const products = await Product.find({userId: req.params.userId});
+    res.status(200).send(products);
+  } catch (e) {
+    const error = {
+      status: "error",
+      status_code: 400,
+      timestamp: new Date(),
+      path: req.originalUrl,
+      request_id: req.requestId,
+      error: {
+        message: e.message,
+      },
+    };
+    res.status(400).send(error);
+  }
+});
 
 // DELETE api/products/:id remove products by id
 

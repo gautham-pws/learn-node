@@ -16,3 +16,17 @@ app.use(productRouter);
 app.listen(3000, () => {
   console.log("Server is running on port 3000");
 });
+
+app.use("/*", async (req, res) => {
+  const error = {
+    status: "error",
+    status_code: 400,
+    timestamp: new Date(),
+    path: req.originalUrl,
+    request_id: req.requestId,
+    error: {
+      message: "Invalid path",
+    },
+  };
+  res.status(400).send(error);
+});

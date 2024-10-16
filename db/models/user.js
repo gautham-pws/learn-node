@@ -72,15 +72,15 @@ userSchema.statics.findByCredentials = async (email, password) => {
     const user = await User.findOne({email});
 
     if (!user) {
-      return "user not found";
+      return {status: "error", message: "user not found"};
     }
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
-      return "invalid credentials";
+      return {status: "error", message: "invalid credentials"};
     }
     return user;
   } catch (e) {
-    return e.message;
+    return {status: "error", message: e.message};
   }
 };
 

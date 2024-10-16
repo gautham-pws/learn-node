@@ -197,11 +197,25 @@ router.post("/api/login", async (req, res) => {
       req.body.email,
       req.body.password
     );
+    if (user.status === "error") {
+      throw new Error(user.message);
+    }
     const token = await user.generateAuthToken();
     res.status(200).send({user, token});
     // res.status(200).send({user});
   } catch (e) {
-    res.status(400).send(e.message);
+    // res.status(400).send(e.message);
+    const error = {
+      status: "error",
+      status_code: 400,
+      timestamp: new Date(),
+      path: "/api/users",
+      request_id: req.requestId,
+      error: {
+        message: e.message,
+      },
+    };
+    res.status(400).send(error);
   }
 });
 
