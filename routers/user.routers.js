@@ -4,9 +4,26 @@ const auth = require("../middleware/auth");
 const router = new express.Router();
 
 // POST api/users add new users
-router.post("/api/users", async (req, res) => {
+router.post("/api/users", auth, async (req, res) => {
   const user = new User(req.body);
+
   try {
+    if (req.user.role !== "admin") {
+      // const error = {
+      //   status: "error",
+      //   status_code: 400,
+      //   timestamp: new Date(),
+      //   path: "/api/users",
+      //   request_id: req.requestId,
+      //   error: {
+      //     message: "Access denied. You don't have permission to create user",
+      //   },
+      // };
+      throw new Error(
+        "Access denied. You don't have permission to create user"
+      );
+    }
+
     await user.save();
     const token = await user.generateAuthToken();
     const success = {
@@ -194,6 +211,7 @@ router.post("/api/login", async (req, res) => {
     );
     const token = await user.generateAuthToken();
     res.status(200).send({user, token});
+    // res.status(200).send({user});
   } catch (e) {
     res.status(400).send(e.message);
   }
