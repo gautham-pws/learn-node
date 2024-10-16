@@ -133,13 +133,14 @@ router.get("/api/users/:id", async (req, res) => {
   }
 });
 
-// GET api/users/:email get user details by id
+// GET api/users/:email get user details by email
 router.get("/api/users/:email", async (req, res) => {
+  console.log("🚀 ~ router.get ~ req:", req);
   try {
-    const user = await User.findOne({email: req.params.email});
-    if (user === null) {
-      //   res.status(404).send({});
-      throw new Error(`User '${req.params.email}' not found`);
+    const user = await User.find({email: req.params.email});
+    if (!user) {
+      res.status(404).send({});
+      //   throw new Error(`User '${req.params.email}' not found`);
     }
     res.status(200).send(user);
   } catch (e) {
