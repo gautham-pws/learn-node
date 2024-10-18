@@ -11,7 +11,12 @@ router.get("/api/products", async (req, res) => {
     //     "Access denied. You don't have permission to view products"
     //   );
     // }
-    const product = await Product.find();
+    // const product = await Product.find();
+
+    // const product = await Product.find().populate("createdBy");
+    const product = await Product.find()
+      .populate("createdBy")
+      .populate("userId");
 
     const success = {
       status: "success",
