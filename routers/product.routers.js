@@ -328,4 +328,51 @@ router.patch("/api/products/userId/:userId/:productId", async (req, res) => {
   }
 });
 
+// GET api/products/sorted to retrieve products sorted by specified fields and orders
+// GET api/products/sorted to retrieve products sorted by specified fields
+router.get("/api/products/sort", async (req, res) => {
+  console.log(req.query);
+
+  const sortFields = {};
+
+  if (req.query.rating) {
+    sortFields.rating = req.query.rating === "1" ? 1 : -1;
+  }
+
+  if (req.query.price) {
+    sortFields.price = req.query.price === "1" ? 1 : -1;
+  }
+  if (req.query.name) {
+    sortFields.name = req.query.name === "1" ? 1 : -1;
+  }
+
+  try {
+    const products = await Product.find()
+      .populate("createdBy")
+      .sort(sortFields);
+    const success = {
+      status: "success",
+      status_code: 200,
+      timestamp: new Date(),
+      path: req.originalUrl,
+      request_id: req.requestId,
+      data: products,
+    };
+
+    res.status(200).send(success);
+  } catch (e) {
+    const error = {
+      status: "error",
+      status_code: 400,
+      timestamp: new Date(),
+      path: req.originalUrl,
+      request_id: req.requestId,
+      error: {
+        message: e.message,
+      },
+    };
+    res.status(400).send(error);
+  }
+});
+
 module.exports = router;
