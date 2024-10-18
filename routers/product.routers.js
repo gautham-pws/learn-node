@@ -328,28 +328,33 @@ router.patch("/api/products/userId/:userId/:productId", async (req, res) => {
   }
 });
 
-// GET api/products/sorted to retrieve products sorted by specified fields and orders
-// GET api/products/sorted to retrieve products sorted by specified fields
 router.get("/api/products/sort", async (req, res) => {
-  console.log(req.query);
-
   const sortFields = {};
 
-  if (req.query.rating) {
-    sortFields.rating = req.query.rating === "1" ? 1 : -1;
-  }
+  const allowedSortFields = ["rating", "price", "name", "email"];
+  const invalidFields = [];
 
-  if (req.query.price) {
-    sortFields.price = req.query.price === "1" ? 1 : -1;
-  }
-  if (req.query.name) {
-    sortFields.name = req.query.name === "1" ? 1 : -1;
+  Object.keys(req.query).forEach((field) => {
+    if (allowedSortFields.includes(field)) {
+      sortFields[field] = req.query[field] === "1" ? 1 : -1;
+    } else {
+      invalidFields.push(field);
+    }
+  });
+
+  if (invalidFields.length > 0) {
+    return res.status(400).send({
+      status: "error",
+      status_code: 400,
+      message: `Invalid query parameter(s): ${invalidFields.join(", ")}`,
+    });
   }
 
   try {
     const products = await Product.find()
       .populate("createdBy")
       .sort(sortFields);
+
     const success = {
       status: "success",
       status_code: 200,
