@@ -5,51 +5,54 @@ const jwt = require("jsonwebtoken");
 
 const Schema = mongoose.Schema;
 
-const userSchema = new Schema({
-  name: {
-    type: String,
-    required: true,
-    trim: true,
-  },
-  age: {
-    type: Number,
-    required: true,
-    validate(value) {
-      if (value < 14) {
-        throw new Error("You must be at least 14 years old to continue");
-      }
+const userSchema = new Schema(
+  {
+    name: {
+      type: String,
+      required: true,
+      trim: true,
     },
-  },
-  email: {
-    type: String,
-    required: true,
-    unique: true,
-    validate(value) {
-      if (!validator.isEmail(value)) {
-        throw new Error("Invalid email!");
-      }
-    },
-  },
-  password: {
-    type: String,
-    required: true,
-    minlength: 3,
-    trim: true,
-  },
-  tokens: [
-    {
-      token: {
-        type: String,
-        required: true,
+    age: {
+      type: Number,
+      required: true,
+      validate(value) {
+        if (value < 14) {
+          throw new Error("You must be at least 14 years old to continue");
+        }
       },
     },
-  ],
-  role: {
-    type: String,
-    enum: ["user", "admin"],
-    default: "user",
+    email: {
+      type: String,
+      required: true,
+      unique: true,
+      validate(value) {
+        if (!validator.isEmail(value)) {
+          throw new Error("Invalid email!");
+        }
+      },
+    },
+    password: {
+      type: String,
+      required: true,
+      minlength: 3,
+      trim: true,
+    },
+    tokens: [
+      {
+        token: {
+          type: String,
+          required: true,
+        },
+      },
+    ],
+    role: {
+      type: String,
+      enum: ["user", "admin"],
+      default: "user",
+    },
   },
-});
+  {timestamps: true}
+);
 
 userSchema.methods.toJSON = function () {
   const user = this.toObject();
@@ -60,7 +63,7 @@ userSchema.methods.toJSON = function () {
 
 userSchema.methods.generateAuthToken = async function () {
   const user = this;
-  const token = await jwt.sign({_id: user._id.toString()}, "secretKey");
+  const token = jwt.sign({_id: user._id.toString()}, "secretKey");
   user.tokens = user.tokens.concat({token});
   await user.save();
   return token;
