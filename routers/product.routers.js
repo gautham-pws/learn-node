@@ -248,10 +248,84 @@ router.get("/api/products/userId/:userId", async (req, res) => {
   }
 });
 
-// DELETE api/products/:id remove products by id
+// POST api/products/:userId to add new products by userId
+router.post("/api/products/userId/:userId", async (req, res) => {
+  const {userId} = req.params;
+  const productData = {...req.body, userId: userId};
 
-// POST api/products/:userid add new products by userid
+  const product = new Product(productData);
+  try {
+    await product.save();
+    const success = {
+      status: "success",
+      status_code: 201,
+      timestamp: new Date(),
+      path: req.originalUrl,
+      request_id: req.requestId,
+      data: product,
+    };
+    res.status(201).send(success);
+  } catch (e) {
+    const error = {
+      status: "error",
+      status_code: 400,
+      timestamp: new Date(),
+      path: req.originalUrl,
+      request_id: req.requestId,
+      error: {
+        message: e.message,
+      },
+    };
+    res.status(400).send(error);
+  }
+});
 
-// PUT api/products/:userid and product id update products by userid
+// PATCH api/products/userId/:userId/:productId to update a product by userId
+router.patch("/api/products/userId/:userId/:productId", async (req, res) => {
+  const {userId, productId} = req.params;
+  try {
+    const product = await Product.findOneAndUpdate(
+      {_id: productId, createdBy: userId},
+      req.body,
+      {new: true, runValidators: true}
+    );
+
+    if (!product) {
+      return res.status(404).send({
+        status: "error",
+        status_code: 404,
+        timestamp: new Date(),
+        path: req.originalUrl,
+        request_id: req.requestId,
+        error: {
+          message:
+            "Product not found or you don't have permission to update it.",
+        },
+      });
+    }
+
+    const success = {
+      status: "success",
+      status_code: 200,
+      timestamp: new Date(),
+      path: req.originalUrl,
+      request_id: req.requestId,
+      data: product,
+    };
+    res.status(200).send(success);
+  } catch (e) {
+    const error = {
+      status: "error",
+      status_code: 400,
+      timestamp: new Date(),
+      path: req.originalUrl,
+      request_id: req.requestId,
+      error: {
+        message: e.message,
+      },
+    };
+    res.status(400).send(error);
+  }
+});
 
 module.exports = router;

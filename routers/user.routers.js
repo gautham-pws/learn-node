@@ -167,7 +167,6 @@ router.get("/api/users/:email", async (req, res) => {
 
 // DELETE api/users delete user by id
 router.delete("/api/users/:id", async (req, res) => {
-  console.log("delete request");
   try {
     const user = await User.findByIdAndDelete(req.params.id);
     if (!user) {
