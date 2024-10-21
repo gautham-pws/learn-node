@@ -2,6 +2,19 @@ const express = require("express");
 const Product = require("../db/models/product");
 const router = new express.Router();
 const auth = require("../middleware/auth");
+const multer = require("multer");
+
+const upload = multer({
+  limits: {
+    fileSize: 1 * 1024 * 1024, // Limit file size to 1 MB
+  },
+  fileFilter(req, file, cb) {
+    if (!file.originalname.match(/\.(jpg|jpeg|png)$/)) {
+      return cb(new Error("Please upload an image file"));
+    }
+    cb(null, true);
+  },
+});
 
 // GET api/products get all products
 router.get("/api/products", async (req, res) => {
@@ -71,8 +84,16 @@ router.get("/api/products/id/:id", async (req, res) => {
 });
 
 // POST api/products add new products
-router.post("/api/products", async (req, res) => {
-  const product = new Product(req.body);
+router.post("/api/products", upload.single("image"), async (req, res) => {
+  const productData = req.body;
+
+  // If an image file was uploaded, add it to the product data
+  if (req.file) {
+    productData.image = req.file.buffer; // Store the image as a binary Buffer in the product schema
+  }
+
+  const product = new Product(productData);
+
   try {
     await product.save();
     const success = {

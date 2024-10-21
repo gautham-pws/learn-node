@@ -74,6 +74,12 @@ const productSchema = new Schema(
 
 productSchema.index({userId: 1});
 
+productSchema.methods.uploadImage = async function (imageBuffer) {
+  const product = this;
+  product.image = imageBuffer;
+  await product.save();
+};
+
 const Products = mongoose.model("Product", productSchema);
 
 module.exports = Products;
