@@ -69,7 +69,7 @@ async function sendNotifications() {
     // Find products added in the last 24 hours
     const newProducts = await Products.find({
       createdAt: {
-        $gte: new Date(now.setDate(now.getDate() - 1)), // Get products from the last 24 hours
+        $gte: new Date(now.setDate(now.getDate() - 1 * 60 * 1000)), // Get products from the last 24 hours
       },
     });
 
