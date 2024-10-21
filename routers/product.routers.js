@@ -3,6 +3,7 @@ const Product = require("../db/models/product");
 const router = new express.Router();
 const auth = require("../middleware/auth");
 const multer = require("multer");
+const {Parser} = require("json2csv"); // Import json2csv
 
 const upload = multer({
   limits: {
@@ -14,6 +15,50 @@ const upload = multer({
     }
     cb(null, true);
   },
+});
+
+// download product details as CSV
+router.get("/api/products/download", async (req, res) => {
+  try {
+    const products = await Product.find();
+
+    // Check if there are any products
+    if (products.length === 0) {
+      return res.status(404).send("No products found");
+    }
+
+    // // Convert image field to Base64
+    // const productsWithBase64Images = products.map((product) => {
+    //   return {
+    //     ...product._doc, // Spread the existing product fields
+    //     image: product.image ? product.image.toString("base64") : null, // Convert image buffer to Base64 string
+    //   };
+    // });
+
+    // Define fields for CSV
+    const fields = [
+      "_id",
+      "name",
+      "description",
+      "price",
+      "rating",
+      "image",
+      "createdAt",
+      "updatedAt",
+    ];
+
+    // Convert products to CSV
+    const json2csvParser = new Parser({fields});
+    // const csv = json2csvParser.parse(productsWithBase64Images);
+    const csv = json2csvParser.parse(products);
+
+    // Set the response header to indicate a file attachment
+    res.header("Content-Type", "text/csv");
+    res.attachment("products.csv"); // Set the filename for the downloaded file
+    res.send(csv); // Send the CSV file to the client
+  } catch (error) {
+    res.status(500).send({error: error.message});
+  }
 });
 
 // GET api/products get all products
