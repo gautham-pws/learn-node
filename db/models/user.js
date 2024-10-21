@@ -50,7 +50,12 @@ const userSchema = new Schema(
       enum: ["user", "admin"],
       default: "user",
     },
+    notifications: {
+      type: Boolean,
+      default: true, // Users can opt in/out for notifications
+    },
   },
+
   {timestamps: true}
 );
 

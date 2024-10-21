@@ -1,5 +1,6 @@
 const express = require("express");
 require("./db/connection");
+require("./middleware/scheduler");
 
 const userRouter = require("./routers/user.routers");
 const productRouter = require("./routers/product.routers");
