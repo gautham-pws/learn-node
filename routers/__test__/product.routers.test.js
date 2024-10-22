@@ -9,3 +9,11 @@ describe("GET /api/products", () => {
     expect(Array.isArray(response.body.data)).toBe(true);
   });
 });
+
+describe("GET /api/users", () => {
+  it("should return all users", async () => {
+    const response = await request(app).get("/api/users");
+    console.log("🚀 ~ it ~ response:", response);
+    expect(response.status).toBe(200);
+  });
+});

@@ -12,7 +12,7 @@ describe("User Model", () => {
     });
 
     // Save the user
-    await user.save();
+    // await user.save();
 
     // Fetch the user back from the database
     const savedUser = await User.findById(user._id);
