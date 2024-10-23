@@ -1,10 +1,10 @@
 // user management service logics are defined here
 
-const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 
-import userSchema from "../models/user.schema";
-import {User} from "../models";
+import userSchema from "../models/user.schema.js";
+import {User} from "../models/index.js";
 
 // custom method to generate auth token
 userSchema.methods.generateAuthToken = async function () {

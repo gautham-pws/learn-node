@@ -1,7 +1,7 @@
 // authentication logic
 
 import jwt from "jsonwebtoken";
-import {User} from "../models";
+import {User} from "../models/index.js";
 
 const auth = async (req, res, next) => {
   try {

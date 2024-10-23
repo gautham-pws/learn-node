@@ -1,4 +1,4 @@
-import {User, Products} from "../models";
+import {User, Products} from "../models/index.js";
 
 async function sendNotifications() {
   try {

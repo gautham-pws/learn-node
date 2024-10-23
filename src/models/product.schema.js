@@ -1,6 +1,6 @@
 // product schema
 
-import {Schema} from "mongoose";
+import mongoose, {Schema} from "mongoose";
 
 const productSchema = new Schema(
   {

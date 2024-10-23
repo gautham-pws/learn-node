@@ -1,6 +1,7 @@
 // user schema
 
-import {Schema} from "mongoose";
+import mongoose, {Schema} from "mongoose";
+import validator from "validator";
 
 const userSchema = new Schema(
   {
@@ -9,14 +10,9 @@ const userSchema = new Schema(
       required: true,
       trim: true,
     },
-    age: {
-      type: Number,
+    dob: {
+      type: Date,
       required: true,
-      validate(value) {
-        if (value < 12) {
-          throw new Error("You must be at least 12 years old to continue");
-        }
-      },
     },
     email: {
       type: String,

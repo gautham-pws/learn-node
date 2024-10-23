@@ -1,7 +1,7 @@
 // scheduler
 
 import cron from "node-cron";
-import sendNotifications from "./notification";
+import sendNotifications from "./notification.js";
 
 // task runs every 24 hour
 cron.schedule("0 * * * *", () => {
