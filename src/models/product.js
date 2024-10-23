@@ -64,6 +64,7 @@ const productSchema = new Schema(
       required: true,
       ref: "User", // Referencing the User model
     },
+
     updatedBy: {
       type: mongoose.Schema.Types.ObjectId,
       required: true,
@@ -77,12 +78,6 @@ const productSchema = new Schema(
 );
 
 productSchema.index({userId: 1});
-
-productSchema.methods.uploadImage = async function (imageBuffer) {
-  const product = this;
-  product.image = imageBuffer;
-  await product.save();
-};
 
 const Products = mongoose.model("Product", productSchema);
 
