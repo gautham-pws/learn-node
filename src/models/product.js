@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-
 const Schema = mongoose.Schema;
 
 const productSchema = new Schema(
@@ -61,6 +60,11 @@ const productSchema = new Schema(
 
     // ID of the user who created the product
     createdBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
+      ref: "User", // Referencing the User model
+    },
+    updatedBy: {
       type: mongoose.Schema.Types.ObjectId,
       required: true,
       ref: "User", // Referencing the User model
