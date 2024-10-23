@@ -4,7 +4,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
 import userSchema from "../models/user.schema";
-import User from "../models";
+import {User} from "../models";
 
 // custom method to generate auth token
 userSchema.methods.generateAuthToken = async function () {
