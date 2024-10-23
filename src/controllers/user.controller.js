@@ -1,6 +1,6 @@
 import {User} from "../models/index.js";
-import auth from "../middleware/auth.js";
-import resFormat from "../utilities/resFomat.js";
+// import auth from "../middleware/auth.js";
+import resFormat from "../utilities/resFormat.js";
 
 // get all the users by default,
 // additionally can pass email, name or role as query parameter
