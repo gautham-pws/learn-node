@@ -1,34 +1,26 @@
-const mongoose = require("mongoose");
-const Schema = mongoose.Schema;
+// product schema
+
+import {Schema} from "mongoose";
 
 const productSchema = new Schema(
   {
-    // Name of the product
     name: {
       type: String,
       required: true,
       trim: true,
     },
-
-    // Description of the product
     description: {
       type: String,
       required: true,
       trim: true,
     },
-
-    // Is the product published or not
     published: {
       type: Boolean,
       default: false,
     },
-
-    // Cover image of the product stored as a binary Buffer
     image: {
       type: Buffer,
     },
-
-    // Price of the product
     price: {
       type: Number,
       required: true,
@@ -38,8 +30,6 @@ const productSchema = new Schema(
         message: "Price must be a valid number.",
       },
     },
-
-    // Rating of the product
     rating: {
       type: Number,
       min: 0,
@@ -50,35 +40,27 @@ const productSchema = new Schema(
         message: "Rating must be a valid number between 0 and 5.",
       },
     },
-
-    // ID of the user who created the product
     userId: {
       type: mongoose.Schema.Types.ObjectId,
       required: true,
-      ref: "User", // Referencing the User model
+      ref: "User",
     },
-
-    // ID of the user who created the product
     createdBy: {
       type: mongoose.Schema.Types.ObjectId,
       required: true,
-      ref: "User", // Referencing the User model
+      ref: "User",
     },
-
     updatedBy: {
       type: mongoose.Schema.Types.ObjectId,
       required: true,
-      ref: "User", // Referencing the User model
+      ref: "User",
     },
   },
   {
-    // Automatically include createdAt and updatedAt fields
     timestamps: true,
   }
 );
 
 productSchema.index({userId: 1});
 
-const Products = mongoose.model("Product", productSchema);
-
-module.exports = Products;
+export default productSchema;
