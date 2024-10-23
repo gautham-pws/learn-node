@@ -1,11 +1,27 @@
 import {User} from "../models/index.js";
 import auth from "../middleware/auth.js";
 import resFormat from "../utilities/resFomat.js";
-// function to get all users
 
+// get all the users by default,
+// additionally can pass email, name or role as query parameter
+// example: http://localhost:3000/api/users?name=gautham&email=gautham.p@pacewisdom.com&role=admin
 export const getUsers = async (req, res) => {
   try {
-    const users = await User.find();
+    const query = {};
+
+    if (req.query.email) {
+      query.email = req.query.email;
+    }
+    if (req.query.name) {
+      // case insensitive matching
+      query.name = {$regex: req.query.name, $options: "i"};
+    }
+    if (req.query.role) {
+      query.role = req.query.role;
+    }
+
+    const users = await User.find(query);
+
     const data = resFormat({
       status: "pass",
       code: 200,
@@ -26,6 +42,7 @@ export const getUsers = async (req, res) => {
   }
 };
 
+// create new user
 export const createUser = async (req, res) => {
   try {
     const user = new User(req.body);
@@ -53,6 +70,7 @@ export const createUser = async (req, res) => {
   }
 };
 
+// updated user by id
 export const updateUser = async (req, res) => {
   try {
     const user = await User.findByIdAndUpdate(req.params.id, req.body, {
@@ -79,6 +97,7 @@ export const updateUser = async (req, res) => {
   }
 };
 
+// delete user by id
 export const deleteUser = async (req, res) => {
   try {
     const user = await User.findByIdAndDelete(req.params.id);
