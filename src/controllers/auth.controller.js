@@ -1,5 +1,4 @@
 import {User} from "../models/index.js";
-// import auth from "../middleware/auth.js";
 import resFormat from "../utilities/resFormat.js";
 
 // login user
@@ -9,8 +8,6 @@ export const postLogin = async (req, res) => {
       req.body.email,
       req.body.password
     );
-    console.log("🚀 ~ postLogin ~ user:", user);
-
     if (user.status === "error") {
       throw new Error(user.message);
     }
