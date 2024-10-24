@@ -2,9 +2,9 @@ import {Product} from "../models/index.js";
 // import auth from "../middleware/auth.js";
 import resFormat from "../utilities/resFormat.js";
 
-// get all the users by default,
-// additionally can pass email, name or role as query parameter
-// example: http://localhost:3000/api/users?name=gautham&email=gautham.p@pacewisdom.com&role=admin
+// get all the prodcuts by default,
+// additionally can pass any query parameter filtering and sort by specific order
+// example: http://localhost:3000/api/products?sortBy=rating:dsc&userId=6718e0ccae18fa7277624a6c
 export const getProducts = async (req, res) => {
   try {
     const query = {};
@@ -28,12 +28,33 @@ export const getProducts = async (req, res) => {
         case "rating":
           query[key] = Number(value);
           break;
+        case "sortBy":
+          break;
         default:
           query[key] = value;
       }
     });
 
-    const products = await Product.find(query);
+    const sortBy = {};
+    const validOrders = ["asc", "dsc"];
+
+    if (req.query.sortBy) {
+      const sortFields = req.query.sortBy.split(","); // e.g., "price-asc,rating-desc"
+      sortFields.forEach((field) => {
+        const [key, order] = field.split(":"); // e.g., "price-asc" => ["price", "asc"]
+        if (!validOrders.includes(order)) {
+          throw new Error(
+            `Invalid sorting order '${order}'. Please use 'asc' for ascending or 'dsc' for descending order`
+          );
+        }
+
+        sortBy[key] = order === "dsc" ? -1 : 1; // Set sort order
+      });
+    }
+
+    const products = await Product.find(query).sort(sortBy);
+    console.log("🚀 ~ getProducts ~ query:", query);
+    console.log("🚀 ~ getProducts ~ sortBy:", sortBy);
 
     // Remove the image field from each product
     const sanitizedProducts = products.map((product) => {
