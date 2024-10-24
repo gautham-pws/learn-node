@@ -2,13 +2,21 @@
 
 import jwt from "jsonwebtoken";
 import {User} from "../models/index.js";
+import resFormat from "../utilities/resFormat.js";
 
 const auth = async (req, res, next) => {
   try {
     const token = req.header("Authorization").replace("Bearer ", "");
 
     if (!token) {
-      return res.status(401).send({error: "Authentication token missing"});
+      const error = resFormat({
+        status: "fail",
+        code: 401,
+        path: req.originalUrl,
+        reqId: req.requestId,
+        message: "Authentication token missing",
+      });
+      res.status(401).send(error);
     }
 
     const decode = jwt.verify(token, "secretKey");
@@ -18,16 +26,13 @@ const auth = async (req, res, next) => {
     });
 
     if (!user) {
-      const error = {
-        status: "error",
-        status_code: 401,
-        timestamp: new Date(),
-        path: "/api/users",
-        request_id: req.requestId,
-        error: {
-          message: "Invalid or expired token",
-        },
-      };
+      const error = resFormat({
+        status: "fail",
+        code: 401,
+        path: req.originalUrl,
+        reqId: req.requestId,
+        message: "Invalid or expired token",
+      });
       res.status(401).send(error);
     }
 
@@ -35,7 +40,14 @@ const auth = async (req, res, next) => {
     req.user = user;
     next();
   } catch (e) {
-    res.status(401).send({error: "Authentication failed"});
+    const error = resFormat({
+      status: "fail",
+      code: 401,
+      path: req.originalUrl,
+      reqId: req.requestId,
+      message: "Authentication failed",
+    });
+    res.status(401).send(error);
   }
 };
 
