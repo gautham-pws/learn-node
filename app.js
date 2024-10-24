@@ -4,6 +4,7 @@ import "./db.connection.js";
 // import productRouter from "./routers/product.routers";
 // import analyticsRouter from "./routers/analytics.routers";
 import userRouter from "./src/routes/user.route.js";
+import authRouter from "./src/routes/auth.route.js";
 import requestId from "./src/utilities/requestId.js";
 import resFormat from "./src/utilities/resFormat.js";
 
@@ -12,6 +13,7 @@ const app = express();
 app.use(json());
 app.use(requestId);
 app.use(userRouter);
+app.use(authRouter);
 // app.use(productRouter);
 // app.use(analyticsRouter);
 
