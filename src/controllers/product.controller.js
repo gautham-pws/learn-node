@@ -1,6 +1,7 @@
 import {Product} from "../models/index.js";
 // import auth from "../middleware/auth.js";
 import resFormat from "../utilities/resFormat.js";
+import logger from "../../logger.js"; // Adjust the import path as needed
 
 // get all the prodcuts by default,
 // additionally can pass any query parameteres for filtering, sort by specific order and pagination with page and limit parameter
@@ -77,7 +78,11 @@ export const getProducts = async (req, res) => {
       reqId: req.requestId,
       message: sanitizedProducts,
     });
+
     res.status(200).send(data);
+
+    delete data.message;
+    logger.info(`success: ${JSON.stringify(data)}`);
   } catch (e) {
     const error = resFormat({
       status: "fail",
@@ -86,6 +91,8 @@ export const getProducts = async (req, res) => {
       reqId: req.requestId,
       message: e.message,
     });
+    logger.error(`error: ${e.message}`);
+
     res.status(400).send(error);
   }
 };
