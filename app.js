@@ -1,20 +1,21 @@
-import express, {json} from "express";
+import express, {json, urlencoded} from "express";
 import "./db.connection.js";
 // import "./middleware/scheduler";
 // import productRouter from "./routers/product.routers";
 // import analyticsRouter from "./routers/analytics.routers";
 import userRouter from "./src/routes/user.route.js";
 import authRouter from "./src/routes/auth.route.js";
+import productRouter from "./src/routes/product.route.js";
 import requestId from "./src/utilities/requestId.js";
 import resFormat from "./src/utilities/resFormat.js";
 
 const app = express();
-
+app.use(urlencoded({extended: true}));
 app.use(json());
 app.use(requestId);
 app.use(userRouter);
 app.use(authRouter);
-// app.use(productRouter);
+app.use(productRouter);
 // app.use(analyticsRouter);
 
 app.use("/*", async (req, res) => {
