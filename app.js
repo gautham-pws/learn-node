@@ -5,7 +5,7 @@ import "./db.connection.js";
 // import analyticsRouter from "./routers/analytics.routers";
 import userRouter from "./src/routes/user.route.js";
 import requestId from "./src/utilities/requestId.js";
-import resFormat from "./src/utilities/resFomat.js";
+import resFormat from "./src/utilities/resFormat.js";
 
 const app = express();
 
