@@ -9,25 +9,45 @@ export const getProducts = async (req, res) => {
   try {
     const query = {};
 
-    if (req.query.email) {
-      query.email = req.query.email;
-    }
-    if (req.query.name) {
-      // case insensitive matching
-      query.name = {$regex: req.query.name, $options: "i"};
-    }
-    if (req.query.role) {
-      query.role = req.query.role;
-    }
+    Object.entries(req.query).forEach(([key, value]) => {
+      switch (key) {
+        case "name":
+        case "description":
+          query[key] = {$regex: value, $options: "i"};
+          break;
+        case "published":
+          if (value === "true" || value === "false") {
+            query.published = value === "true";
+          } else {
+            throw new Error(
+              `Invalid value for 'published'. Expected 'true' or 'false'`
+            );
+          }
+          break;
+        case "price":
+        case "rating":
+          query[key] = Number(value);
+          break;
+        default:
+          query[key] = value;
+      }
+    });
 
     const products = await Product.find(query);
+
+    // Remove the image field from each product
+    const sanitizedProducts = products.map((product) => {
+      const productObject = product.toObject(); // Convert Mongoose document to plain JavaScript object
+      delete productObject.image; // Remove the image field
+      return productObject;
+    });
 
     const data = resFormat({
       status: "pass",
       code: 200,
       path: req.originalUrl,
       reqId: req.requestId,
-      message: products,
+      message: sanitizedProducts,
     });
     res.status(200).send(data);
   } catch (e) {

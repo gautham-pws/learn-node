@@ -10,7 +10,7 @@ import auth from "../middleware/auth.js";
 import isAdmin from "../middleware/isAdmin.js";
 
 // GET api/users get all users, filter by id, email, role
-router.get("/api/users", auth, getUsers);
+router.get("/api/users", getUsers);
 
 // POST api/users create new user
 router.post("/api/users", auth, isAdmin, createUser);
