@@ -4,6 +4,7 @@ import {
   createProduct,
   updateProduct,
   deleteProduct,
+  productUserInfo,
 } from "../controllers/product.controller.js";
 const router = new Router();
 import auth from "../middleware/auth.js";
@@ -21,5 +22,8 @@ router.patch("/api/products/:id", auth, updateProduct);
 
 // DELETE api/users delete user
 router.delete("/api/products/:id", auth, deleteProduct);
+
+// getProductsWithUserInfo: virtual view with aggregate
+router.get("/api/products/user-info", productUserInfo);
 
 export default router;

@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import "../services/user.service.js";
+import "../services/product.service.js";
 import productSchema from "./product.schema.js";
 import userSchema from "./user.schema.js";
 

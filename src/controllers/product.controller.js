@@ -97,7 +97,7 @@ export const getProducts = async (req, res) => {
   }
 };
 
-// create new user
+// create new product
 export const createProduct = async (req, res) => {
   try {
     const productData = req.body;
@@ -129,10 +129,10 @@ export const createProduct = async (req, res) => {
   }
 };
 
-// updated user by id
+// updated product by id
 export const updateProduct = async (req, res) => {
   try {
-    const user = await User.findByIdAndUpdate(req.params.id, req.body, {
+    const product = await Product.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
       runValidators: true,
     });
@@ -141,7 +141,7 @@ export const updateProduct = async (req, res) => {
       code: 200,
       path: req.originalUrl,
       reqId: req.requestId,
-      message: user,
+      message: product,
     });
     res.status(200).send(data);
   } catch (e) {
@@ -156,19 +156,42 @@ export const updateProduct = async (req, res) => {
   }
 };
 
-// delete user by id
+// delete product by id
 export const deleteProduct = async (req, res) => {
   try {
-    const user = await User.findByIdAndDelete(req.params.id);
-    if (!user) {
-      throw new Error(`User '${req.params.id}' not found`);
+    const product = await User.findByIdAndDelete(req.params.id);
+    if (!product) {
+      throw new Error(`Product '${req.params.id}' not found`);
     }
     const data = resFormat({
       status: "pass",
       code: 200,
       path: req.originalUrl,
       reqId: req.requestId,
-      message: user,
+      message: product,
+    });
+    res.status(200).send(data);
+  } catch (e) {
+    const error = resFormat({
+      status: "fail",
+      code: 400,
+      path: req.originalUrl,
+      reqId: req.requestId,
+      message: e.message,
+    });
+    res.status(400).send(error);
+  }
+};
+// product product info
+export const productUserInfo = async (req, res) => {
+  try {
+    const products = await Product.getProductsWithUserInfo();
+    const data = resFormat({
+      status: "pass",
+      code: 200,
+      path: req.originalUrl,
+      reqId: req.requestId,
+      message: products,
     });
     res.status(200).send(data);
   } catch (e) {
