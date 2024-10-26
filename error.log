@@ -1,3 +1,6 @@
 2024-10-24T11:25:16.456Z [error]: error: Invalid sorting order 'dscd'. Please use 'asc' for ascending or 'dsc' for descending order
 2024-10-24T11:25:40.708Z [error]: error: Invalid sorting order 'dscd'. Please use 'asc' for ascending or 'dsc' for descending order
 2024-10-24T11:27:38.951Z [error]: error: Invalid sorting order 'dscd'. Please use 'asc' for ascending or 'dsc' for descending order
+2024-10-25T21:58:23.886Z [error]: Uncaught Exception: This is caused by either a bug in Node.js or incorrect usage of Node.js internals.
+Please open an issue with this stack trace at https://github.com/nodejs/node/issues
+

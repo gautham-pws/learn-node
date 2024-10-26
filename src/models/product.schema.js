@@ -63,4 +63,14 @@ const productSchema = new Schema(
 
 productSchema.index({userId: 1});
 
+productSchema.virtual("user", {
+  ref: "User",
+  localField: "userId",
+  foreignField: "_id",
+  justOne: true,
+});
+
+productSchema.set("toObject", {virtuals: true});
+productSchema.set("toJSON", {virtuals: true});
+
 export default productSchema;

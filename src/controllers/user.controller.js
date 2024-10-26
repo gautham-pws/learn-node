@@ -47,6 +47,10 @@ export const createUser = async (req, res) => {
   try {
     const user = new User(req.body);
     const token = await user.generateAuthToken();
+
+    user.createdBy = req.user._id;
+    user.updatedBy = req.user._id;
+
     await user.save();
 
     const data = resFormat({
@@ -73,10 +77,16 @@ export const createUser = async (req, res) => {
 // updated user by id
 export const updateUser = async (req, res) => {
   try {
-    const user = await User.findByIdAndUpdate(req.params.id, req.body, {
+    const {createdAt, createdBy, ...updateFields} = req.body;
+
+    updateFields.updatedAt = new Date();
+    updateFields.updatedBy = req.user._id;
+
+    const user = await User.findByIdAndUpdate(req.params.id, updateFields, {
       new: true,
       runValidators: true,
     });
+
     const data = resFormat({
       status: "pass",
       code: 200,

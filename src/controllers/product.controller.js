@@ -185,7 +185,13 @@ export const deleteProduct = async (req, res) => {
 // product product info
 export const productUserInfo = async (req, res) => {
   try {
-    const products = await Product.getProductsWithUserInfo();
+    //using aggregate pipeline
+    // const products = await Product.getProductsWithUserInfo();
+
+    // using virtual field
+    const products = await Product.find({}).populate("user", "name email");
+    // const products = await Product.find({});
+
     const data = resFormat({
       status: "pass",
       code: 200,
