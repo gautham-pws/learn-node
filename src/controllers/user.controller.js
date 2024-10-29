@@ -6,6 +6,7 @@ import {
   generateAuthToken,
   findByCredentials,
   toJSON,
+  createNewUser,
 } from "../services/user.service.js";
 
 // get all the users by default,
@@ -60,16 +61,10 @@ export const getUsers = async (req, res) => {
   }
 };
 
-// create new user
 export const createUser = async (req, res) => {
   try {
-    const user = new User(req.body);
-    const token = await user.generateAuthToken();
-
-    user.createdBy = req.user._id;
-    user.updatedBy = req.user._id;
-
-    await user.save();
+    const user = await createNewUser(req.body);
+    const token = await generateAuthToken(user);
 
     const data = resFormat({
       status: "pass",
@@ -91,6 +86,38 @@ export const createUser = async (req, res) => {
     res.status(400).send(error);
   }
 };
+
+// create new user
+// export const createUser = async (req, res) => {
+//   try {
+//     const user = new User(req.body);
+//     const token = await user.generateAuthToken();
+
+//     user.createdBy = req.user._id;
+//     user.updatedBy = req.user._id;
+
+//     await user.save();
+
+//     const data = resFormat({
+//       status: "pass",
+//       code: 200,
+//       path: req.originalUrl,
+//       reqId: req.requestId,
+//       message: user,
+//     });
+
+//     res.status(201).send({data, token});
+//   } catch (e) {
+//     const error = resFormat({
+//       status: "fail",
+//       code: 400,
+//       path: req.originalUrl,
+//       reqId: req.requestId,
+//       message: e.message,
+//     });
+//     res.status(400).send(error);
+//   }
+// };
 
 // updated user by id
 export const updateUser = async (req, res) => {

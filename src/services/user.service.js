@@ -102,12 +102,12 @@ export const findByCredentials = async (email, password) => {
   return user;
 };
 
-export const createUser = async (userData) => {
+export const createNewUser = async (userData) => {
   const {password, ...otherUserData} = userData;
   const hashedPassword = await bcrypt.hash(password, 8);
 
   const user = await prisma.users.create({
-    data: {...otherUserData, password: hashedPassword},
+    data: {...otherUserData, password: hashedPassword, v: 1},
   });
   return toJSON(user);
 };

@@ -15,7 +15,7 @@ type UsersTokens {
 model products {
   id          String   @id @default(auto()) @map("_id") @db.ObjectId
   v           Int      @map("__v")
-  createdAt   DateTime @db.Date
+  createdAt   DateTime @default(now())
   createdBy   String   @db.ObjectId
   description String
   image       Bytes
@@ -30,16 +30,22 @@ model products {
   @@index([userId], map: "userId_1")
 }
 
+enum UserRole {
+  user
+  admin
+}
+
+
 model users {
   id        String        @id @default(auto()) @map("_id") @db.ObjectId
   v         Int           @map("__v")
-  createdAt DateTime      @db.Date
+  createdAt DateTime      @default(now())
   createdBy String        @db.ObjectId
   dob       DateTime      @db.Date
   email     String        @unique(map: "email_1")
   name      String
   password  String
-  role      String
+  role      UserRole      @default(user) 
   tokens    Json          @default("[]") 
   updatedAt DateTime      @db.Date
   updatedBy String        @db.ObjectId

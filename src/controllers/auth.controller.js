@@ -66,7 +66,6 @@ import resFormat from "../utilities/resFormat.js";
 import {
   generateAuthToken,
   findByCredentials,
-  createUser,
   toJSON,
 } from "../services/user.service.js";
 

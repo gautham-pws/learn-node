@@ -4,3 +4,36 @@
 2024-10-25T21:58:23.886Z [error]: Uncaught Exception: This is caused by either a bug in Node.js or incorrect usage of Node.js internals.
 Please open an issue with this stack trace at https://github.com/nodejs/node/issues
 
+2024-10-29T06:38:39.750Z [error]: Unhandled Rejection: Cannot read properties of undefined (reading 'body')
+2024-10-29T06:40:27.544Z [error]: Unhandled Rejection: 
+Invalid `prisma.users.create()` invocation:
+
+{
+  data: {
+    name: "Gautham Prasad",
+    dob: "1996-03-12",
+    email: "gautham.p+6@pacewisdom.com",
+    updatedBy: "6718e0ccae18fa7277624a6c",
+    createdBy: "6718e0ccae18fa7277624a6c",
+    password: "$2b$08$1tDLJfuwJgkbKryTY7FeZeBDoykgvLMb8W4XqzAx90OcjuC423wjm",
++   v: Int
+  }
+}
+
+Argument `v` is missing.
+2024-10-29T06:40:54.505Z [error]: Unhandled Rejection: 
+Invalid `prisma.users.create()` invocation:
+
+{
+  data: {
+    name: "Gautham Prasad",
+    dob: "1996-03-12",
+    email: "gautham.p+6@pacewisdom.com",
+    updatedBy: "6718e0ccae18fa7277624a6c",
+    createdBy: "6718e0ccae18fa7277624a6c",
+    password: "$2b$08$gl06jXyntUt.mKF6DZtbI.NmSD6dN3xpQA68.bu0CI2PA1fbFMQOm",
++   v: Int
+  }
+}
+
+Argument `v` is missing.
