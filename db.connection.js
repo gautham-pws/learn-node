@@ -4,7 +4,7 @@ import {connect} from "mongoose";
 // Load environment variables from .env file
 dotenv.config();
 
-const uri = process.env.MONGO_URI;
+const uri = process.env.DATABASE_URL;
 
 async function connectToDatabase() {
   try {
